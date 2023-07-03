@@ -1,16 +1,20 @@
 use core::fmt;
-use std::{hash::{Hash}};
+use std::hash::Hash;
 
 #[derive(Debug)]
 pub struct Node {
     goal: String,
     subgoals: Vec<String>,
-    commands: Vec<String>, 
+    commands: Vec<String>,
 }
 
 impl Node {
     pub fn new(goal: &str) -> Node {
-        Node {goal: goal.to_string(), subgoals: vec![], commands: vec![] }
+        Node {
+            goal: goal.to_string(),
+            subgoals: vec![],
+            commands: vec![],
+        }
     }
 
     pub fn get_goal(&self) -> &String {
@@ -22,7 +26,15 @@ impl Node {
     }
 
     pub fn set_subgoals(&mut self, subgoals: &Vec<String>) {
-        self.subgoals = subgoals.clone(); 
+        self.subgoals = subgoals.clone();
+    }
+
+    pub fn push_command(&mut self, command: String) {
+        self.commands.push(command);
+    }
+
+    pub fn get_commands(&self) -> &Vec<String> {
+        &self.commands
     }
 }
 
@@ -33,8 +45,8 @@ impl fmt::Display for Node {
 }
 
 impl Hash for Node {
-    fn hash<H:std::hash::Hasher>(&self, state: &mut H) {
-        self.goal.hash(state); 
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.goal.hash(state);
     }
 }
 
