@@ -4,21 +4,22 @@ use std::io;
 use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
 
-use crate::{Graph, Node};
+use crate::graph::node::Node;
+use crate::graph::Graph;
 
 #[derive(Parser, Debug)]
 #[command(author, version, about)]
 pub struct Args {
     /// Filename
     #[arg(short, long)]
-    file: String,
+    pub file: String,
 
     /// Number of threads
     #[arg(short = 'j', long, default_value_t = 1)]
-    threads: u8,
+    pub threads: u8,
 
     /// Targets to run
-    targets: Vec<String>,
+    pub targets: Vec<String>,
 }
 
 #[derive(Debug, thiserror::Error)]

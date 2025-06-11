@@ -1,59 +1,31 @@
-use core::fmt;
-use std::hash::Hash;
+use std::path::PathBuf;
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
+pub enum NodeStatus {
+    Pending,
+    Ready,
+    Building,
+    Complete,
+    Failed(String),
+}
+
+#[derive(Debug, Clone)]
 pub struct Node {
-    goal: String,
-    subgoals: Vec<String>,
-    commands: Vec<String>,
+    pub target: String,
+    pub dependencies: Vec<String>,
+    pub commands: Vec<String>,
+    pub output: Option<PathBuf>,
+    pub state: NodeStatus,
 }
 
 impl Node {
-    pub fn new(goal: &str) -> Node {
-        Node {
-            goal: goal.to_string(),
-            subgoals: vec![],
-            commands: vec![],
+    pub fn new(target: String) -> Node {
+        Self {
+            target,
+            dependencies: Vec::new(),
+            commands: Vec::new(),
+            output: None,
+            state: NodeStatus::Pending,
         }
     }
-
-    pub fn get_goal(&self) -> &String {
-        &self.goal
-    }
-
-    pub fn get_subgoals(&self) -> &Vec<String> {
-        &self.subgoals
-    }
-
-    pub fn set_subgoals(&mut self, subgoals: &Vec<String>) {
-        self.subgoals = subgoals.clone();
-    }
-
-    pub fn push_command(&mut self, command: String) {
-        self.commands.push(command);
-    }
-
-    pub fn get_commands(&self) -> &Vec<String> {
-        &self.commands
-    }
 }
-
-impl fmt::Display for Node {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "goal: {}", self.goal)
-    }
-}
-
-impl Hash for Node {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.goal.hash(state);
-    }
-}
-
-impl PartialEq for Node {
-    fn eq(&self, other: &Self) -> bool {
-        self.goal == other.goal
-    }
-}
-
-impl Eq for Node {}
