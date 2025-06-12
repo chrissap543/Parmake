@@ -6,7 +6,8 @@ use parser::Args;
 mod graph;
 mod parser;
 
-fn main() -> Result<(), CycleError> {
+#[tokio::main]
+async fn main() -> Result<(), CycleError> {
     // let mut g = Graph::new(4);
     // if let Err(e) = g.parse_makefile("makefiles/Makefile") {
     //     eprintln!("{}", e.to_string());
@@ -21,7 +22,7 @@ fn main() -> Result<(), CycleError> {
     }
     g.debug_print();
 
-    let topo = g.topo_sort()?;
+    g.run_targets(args.targets).await;
 
     Ok(())
 }
